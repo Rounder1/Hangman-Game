@@ -8,6 +8,8 @@ window.onload = function () {
     var listOfWords = ["Ohio", "Texas", "Maine", "Florida", "Iowa"];  
     var playerWins = 0;
     var playerGuessesLeft = 15;
+    var guessesToWin = 0;
+    var correctGuesses = 0;
     var playerGuessCorrect  = false;
 
     // Used for validation, checks to see if the user pressed a letter 
@@ -17,28 +19,30 @@ window.onload = function () {
     var randomWord = listOfWords[Math.floor(Math.random() * listOfWords.length)]; 
     var goalWord = randomWord.toUpperCase();
 
-    // Store the letters the player guesses as an array so it can be more easily maipulated
+    // Store the letters the player guesses in arrays so it can be more easily maipulated
     var playerStatus = []; 
-  
+    var playerWrongLetters = [];
 
    
 
 
 
 
-    // This loop will assing the playerStatus Array an underscore for each letter in goalWord
+    // This loop will assing the playerStatus Array an underscore for each letter in goalWord, it will also determine the number of correct guesses needed to win
     for (i=0; i < goalWord.length; i++) { 
         playerStatus[i] = "_";
+        guessesToWin++;
     }
 
     // This converts the playerStatus array into a string with the join method and adds a space to seperate each letter. Then writes the string to the document 
     document.getElementById("word_underscores").innerHTML = playerStatus.join(" ");
     document.getElementById("guesses_remaining").innerHTML = "Guesses Remaining: " + playerGuessesLeft;
+    document.getElementById("wins_tag").innerHTML = "Wins: " + playerWins;
 
 
 
-
-    console.log(goalWord); // for troubleshooting
+                    console.log(guessesToWin); // for troubleshooting
+                    console.log(goalWord); // for troubleshooting
 
 
 
@@ -47,29 +51,66 @@ window.onload = function () {
         var pressedKey = event.key; 
         var guessedLetter = pressedKey.toUpperCase();
 
-        //checks to make sure the pressed key is a letter.
-        if (regexLettersOnly.test(guessedLetter)) { 
+        //checks to make sure the pressed key is a letter And that the user has not guessed it befor.
+        if (regexLettersOnly.test(guessedLetter) && playerWrongLetters.includes(guessedLetter) === false) { 
 
             // checks to make sure the pressed key matches a letter(s) in the goalWord, if it does then it replaces the corilating underscore with that letter 
-            for (i=0; i < goalWord.length; i++){ 
+            for (i=0; i < goalWord.length; i++) { 
                 if (goalWord.charAt(i) === guessedLetter) {
                     playerStatus[i] = guessedLetter;
                     playerGuessCorrect = true;
+                    correctGuesses++;
                 } 
             }
 
             // Updates the document with the new value of playerStatus
             document.getElementById("word_underscores").innerHTML = playerStatus.join(" ");
 
+            // Keep track of player wrong guesses 
             if (playerGuessCorrect !== true) {
                 playerGuessesLeft = playerGuessesLeft -1;
+                playerWrongLetters.push(guessedLetter);
             }
 
-            // updates the document with the remaining number of guesses then sets guesses back to false
+            // Check to see if player wins, then reset the game
+            if (correctGuesses === guessesToWin) {
+                guessesToWin = 0;
+                playerGuessesLeft = 16;
+                correctGuesses = 0;
+                playerWrongLetters = [];
+                playerWins++;
+                document.getElementById("guessed_letters").innerHTML = playerWrongLetters.join();
+                document.getElementById("win_or_lose").innerHTML = "You win! Congratulations! Press any key to play again.";
+                document.getElementById("guesses_remaining").innerHTML = "Guesses Remaining: ";
+                document.getElementById("wins_tag").innerHTML = "Wins: " + playerWins;
+                
+                for (i=0; i < goalWord.length; i++) { 
+                    playerStatus[i] = "_";
+                    guessesToWin++;
+                } 
+            } 
+
+            // Check to see if the player looses, then resets the game
+            if (playerGuessesLeft === 0) {
+                guessesToWin = 0;
+                playerGuessesLeft = 16;
+                correctGuesses = 0;
+                playerWrongLetters = [];
+                document.getElementById("guessed_letters").innerHTML = playerWrongLetters.join();
+                document.getElementById("win_or_lose").innerHTML = "You lost. Try again! Press any key to play again.";
+                document.getElementById("guesses_remaining").innerHTML = "Guesses Remaining: ";
+                
+                for (i=0; i < goalWord.length; i++) { 
+                    playerStatus[i] = "_";
+                    guessesToWin++;
+                }
+            } 
+
+            // Updates the document with the remaining number of guesses then sets guesses back to false
             document.getElementById("guesses_remaining").innerHTML = "Guesses Remaining: " + playerGuessesLeft;
+            document.getElementById("guessed_letters").innerHTML = playerWrongLetters.join(" ");
             playerGuessCorrect = false;
         } 
-
     }
 }
 
