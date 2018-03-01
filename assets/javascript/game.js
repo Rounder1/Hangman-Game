@@ -3,6 +3,7 @@ window.onload = function () {
     
     var listOfWords = ["Ohio", "Texas", "Maine", "Florida", "Iowa", "Illinois", "Georgia"];  
     var playerWins = 0;
+    var playerLosses = 0;
     var playerGuessesLeft = 15;
     var guessesToWin = 0;
     var correctGuesses = 0;
@@ -33,6 +34,7 @@ window.onload = function () {
         document.getElementById("guessed_letters").innerHTML = playerWrongLetters.join();
         document.getElementById("win_or_lose").innerHTML = endGameMessage;
         document.getElementById("wins_tag").innerHTML = "Wins: " + playerWins;
+        document.getElementById("losses_tag").innerHTML = "Losses: " + playerLosses;
     
         for (i=0; i < goalWord.length; i++) { 
             playerStatus[i] = "_";
@@ -58,6 +60,7 @@ window.onload = function () {
     // These write the player's stats to the secreen when the page first loads
     document.getElementById("guesses_remaining").innerHTML = "Guesses Remaining: " + playerGuessesLeft;
     document.getElementById("wins_tag").innerHTML = "Wins: " + playerWins;
+    document.getElementById("losses_tag").innerHTML = "Losses: " + playerLosses;
 
 
 
@@ -102,6 +105,7 @@ window.onload = function () {
 
             // Check to see if the player looses, then resets the game
             if (playerGuessesLeft === 0) {
+                playerLosses++;
                 newGame("You lost. Try again! Press any key to play again.");
             } 
 
