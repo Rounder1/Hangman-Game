@@ -118,19 +118,3 @@ window.onload = function () {
 }
 
 
-/*
-
-Code I might use:
-
-1. For Loop to check player's answer that I know works
-
-            
-
-2. if (pressedKey.length === 1 && ... ) // add this into the if statement to see if more then one letter was pressed
-
-REFERANCE:
-what is regex: https://www.coursera.org/learn/web-development/lecture/3skTp/html-form-validation-javascript
-wait for window to load: https://www.youtube.com/watch?v=fXGUEkHPRLg
-get player guess to count: https://www.youtube.com/watch?v=tbLCMFp9QK4
-
-*/
